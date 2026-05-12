@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Birthday Ishita! 🎂</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #fdfbfb;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --primary: #ff758c;
+            --primary-hover: #ff7eb3;
+            --text: #4a4a4a;
+            --wordle-green: #6aaa64;
+            --wordle-yellow: #c9b458;
+            --wordle-gray: #787c7e;
+            --wordle-empty: #d3d6da;
+        }
+
+        * {
+            box-sizing: border-box; /* Ensures padding doesn't break mobile width */
+            -webkit-tap-highlight-color: transparent; /* Removes blue tap highlight on mobile */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ebedee 0%, #fdfbfb 100%);
+            background-image: radial-gradient(#ff7eb3 0.5px, transparent 0.5px), radial-gradient(#ff7eb3 0.5px, transparent 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 15px;
+        }
+
+        /* Mobile-First Page Container */
+        .page {
+            display: none;
+            width: 100%;
+            max-width: 450px; /* Looks good on tablets/desktop too */
+            background: var(--card-bg);
+            padding: 35px 25px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(255, 117, 140, 0.15);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 { color: var(--primary); font-size: 2rem; margin-top: 0; line-height: 1.2; }
+        h2 { color: var(--primary); font-size: 1.6rem; margin-top: 0; }
+        p { font-size: 1rem; margin-bottom: 20px; color: #666; }
+
+        .clue {
+            background: #fff0f5;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            border: 2px dashed var(--primary);
+        }
+
+        input[type="text"] {
+            width: 100%; /* Full width for mobile */
+            padding: 16px;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            outline: none;
+            transition: 0.3s;
+            margin-bottom: 12px;
+            background: #fafafa;
+        }
+
+        input[type="text"]:focus { border-color: var(--primary); background: #fff; }
+
+        button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 117, 140, 0.3);
+            width: 100%; /* Full width for easy mobile tapping */
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .error-msg {
+            color: #ff4757;
+            font-weight: 600;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            min-height: 20px; /* Prevents layout jumping */
+        }
+
+        .shake { animation: shake 0.4s; border-color: #ff4757 !important; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            50% { transform: translateX(6px); }
+            75% { transform: translateX(-6px); }
+        }
+
+        /* Image Styles Optimized for Mobile */
+        .zoomed-img { 
+            width: 100%; 
+            max-height: 250px; 
+            object-fit: cover;
+            border-radius: 15px; 
+            margin-bottom: 20px; 
+            border: 3px solid #fff; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+        }
+        
+        .img-grid {
+            display: flex;
+            justify-content: space-between; /* Spreads evenly on mobile */
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        .img-item { text-align: center; flex: 1; }
+        .img-item img {
+            width: 100%; 
+            max-width: 60px;
+            aspect-ratio: 1/1; 
+            object-fit: cover; 
+            border-radius: 10px; 
+            border: 2px solid white; 
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
+        .img-item span { display: block; font-weight: bold; color: var(--primary); margin-top: 5px; font-size: 0.9rem;}
+
+        /* Wordle Styles Optimized for Mobile */
+        .wordle-grid {
+            display: grid;
+            grid-template-rows: repeat(5, 1fr);
+            gap: 8px;
+            width: 100%;
+            max-width: 240px;
+            margin: 0 auto 20px auto;
+        }
+        .wordle-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        .wordle-box {
+            aspect-ratio: 1/1; /* Keeps boxes perfectly square */
+            border: 2px solid var(--wordle-empty);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            border-radius: 8px;
+            transition: all 0.5s ease;
+        }
+        .wordle-box.filled { border-color: var(--wordle-gray); }
+        .wordle-box.green { background-color: var(--wordle-green); border-color: var(--wordle-green); color: white; }
+        .wordle-box.yellow { background-color: var(--wordle-yellow); border-color: var(--wordle-yellow); color: white; }
+        .wordle-box.gray { background-color: var(--wordle-gray); border-color: var(--wordle-gray); color: white; }
+
+        /* Video Styles */
+        video {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            margin-top: 15px;
+            background: #000;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- INTRO PAGE -->
+    <div id="page-intro" class="page active">
+        <h1>Happy Birthday Ishita! 🎉</h1>
+        <p>I made this little game just for you. You have to pass 5 levels to unlock your final birthday surprise.</p>
+        <button onclick="goToPage('page-1')">Start the Game ✨</button>
+    </div>
+
+    <!-- LEVEL 1 -->
+    <div id="page-1" class="page">
+        <h2>Level 1 🧩</h2>
+        <p>Decode the emojis to find the word!</p>
+        <div class="clue">😁 📸 😄</div>
+        <input type="text" id="input-1" placeholder="Type your answer..." onkeypress="handleEnter(event, 1, 'smile', 'page-2')">
+        <button onclick="checkLevel(1, 'smile', 'page-2')">Check Answer</button>
+        <div class="error-msg" id="error-1"></div>
+    </div>
+
+    <!-- LEVEL 2 -->
+    <div id="page-2" class="page">
+        <h2>Level 2 📍</h2>
+        <p>Where was this picture taken?</p>
+        <img src="Zoomed.png" alt="Zoomed Clue" class="zoomed-img" onerror="this.src='https://via.placeholder.com/300x200?text=Zoomed.png'">
+        <input type="text" id="input-2" placeholder="Enter location..." onkeypress="handleEnter(event, 2, 'park', 'page-3')">
+        <button onclick="checkLevel(2, 'park', 'page-3')">Check Answer</button> 
+        <div class="error-msg" id="error-2"></div>
+    </div>
+
+    <!-- LEVEL 3 -->
+    <div id="page-3" class="page">
+        <h2>Level 3 ⏳</h2>
+        <p>What is the correct chronological order of these pictures? (e.g. 12345)</p>
+        <div class="img-grid">
+            <div class="img-item"><img src="Img1.png" alt="1" onerror="this.src='https://via.placeholder.com/65?text=1'"><span>1</span></div>
+            <div class="img-item"><img src="Img2.png" alt="2" onerror="this.src='https://via.placeholder.com/65?text=2'"><span>2</span></div>
+            <div class="img-item"><img src="Img3.png" alt="3" onerror="this.src='https://via.placeholder.com/65?text=3'"><span>3</span></div>
+            <div class="img-item"><img src="Img4.png" alt="4" onerror="this.src='https://via.placeholder.com/65?text=4'"><span>4</span></div>
+            <div class="img-item"><img src="Img5.png" alt="5" onerror="this.src='https://via.placeholder.com/65?text=5'"><span>5</span></div>
+        </div>
+        <input type="text" id="input-3" placeholder="Enter sequence..." onkeypress="handleEnter(event, 3, '43512', 'page-4')">
+        <button onclick="checkLevel(3, '43512', 'page-4')">Check Answer</button> 
+        <div class="error-msg" id="error-3"></div>
+    </div>
+
+    <!-- LEVEL 4 (WORDLE) -->
+    <div id="page-4" class="page">
+        <h2>Level 4 🟩</h2>
+        <p>Guess the 4-letter magic word. You have 5 tries!</p>
+        
+        <div class="wordle-grid" id="wordle-grid">
+            <!-- 5 Rows generated by JS -->
+        </div>
+
+        <div id="wordle-controls">
+            <input type="text" id="input-4" maxlength="4" placeholder="Type 4 letters..." style="text-transform: uppercase; letter-spacing: 5px;" onkeypress="if(event.key === 'Enter') submitWordle()">
+            <button onclick="submitWordle()">Guess</button>
+            <div class="error-msg" id="error-4"></div>
+        </div>
+
+        <div id="wordle-success" style="display: none;">
+            <h3 style="color: var(--wordle-green); margin-top: 0;">Genius! 🎉</h3>
+            <button onclick="goToPage('page-5')">Go to Final Level ➡️</button>
+        </div>
+    </div>
+
+    <!-- LEVEL 5 -->
+    <div id="page-5" class="page">
+        <h2>Level 5 🍣</h2>
+        <p>Last question before the surprise!</p>
+        <div class="clue" style="font-size: 1.2rem; font-weight: bold;">What is your favorite food?</div>
+        <input type="text" id="input-5" placeholder="Type your answer..." onkeypress="handleEnter(event, 5, 'sushi', 'page-final', true)">
+        <button onclick="checkLevel(5, 'sushi', 'page-final', true)">Check Answer</button>
+        <div class="error-msg" id="error-5"></div>
+    </div>
+
+    <!-- FINAL VIDEO PAGE -->
+    <div id="page-final" class="page">
+        <h1>You Did It! 🎁</h1>
+        <p>Happy Birthday Ishita! Here is your special surprise.</p>
+        <video controls playsinline>
+            <source src="Ishita_birthday.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <script>
+        // --- Navigation Logic ---
+        function goToPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0, 0); // Scroll to top for mobile
+        }
+
+        // --- Handle 'Enter' key on mobile keyboards ---
+        function handleEnter(event, levelNum, correctAnswer, nextPageId, isFinal = false) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Stop default form submission behavior
+                checkLevel(levelNum, correctAnswer, nextPageId, isFinal);
+                // Hide mobile keyboard
+                document.getElementById(`input-${levelNum}`).blur(); 
+            }
+        }
+
+        // --- Standard Level Checking ---
+        function checkLevel(levelNum, correctAnswer, nextPageId, isFinal = false) {
+            const inputElement = document.getElementById(`input-${levelNum}`);
+            const errorElement = document.getElementById(`error-${levelNum}`);
+            // Force lowercase and remove accidental spaces
+            const userAnswer = inputElement.value.trim().toLowerCase().replace(/\s+/g, ' '); 
+
+            if (userAnswer === correctAnswer.toLowerCase()) {
+                errorElement.textContent = "";
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                
+                setTimeout(() => {
+                    goToPage(nextPageId);
+                    if(isFinal) triggerFinalConfetti();
+                }, 1200);
+
+            } else {
+                errorElement.textContent = "Oops! Try again 🥺";
+                inputElement.classList.add('shake');
+                setTimeout(() => inputElement.classList.remove('shake'), 400);
+            }
+        }
+
+        // --- Wordle Logic ---
+        const targetWord = "LUNA";
+        const maxAttempts = 5;
+        let currentAttempt = 0;
+        
+        const grid = document.getElementById("wordle-grid");
+        for (let i = 0; i < maxAttempts; i++) {
+            const row = document.createElement("div");
+            row.className = "wordle-row";
+            row.id = `wordle-row-${i}`;
+            for (let j = 0; j < 4; j++) {
+                const box = document.createElement("div");
+                box.className = "wordle-box";
+                box.id = `box-${i}-${j}`;
+                row.appendChild(box);
+            }
+            grid.appendChild(row);
+        }
+
+        function submitWordle() {
+            const input = document.getElementById("input-4");
+            const guess = input.value.trim().toUpperCase();
+            const errorElement = document.getElementById("error-4");
+
+            if (guess.length !== 4) {
+                errorElement.textContent = "Word must be 4 letters!";
+                input.classList.add('shake');
+                setTimeout(() => input.classList.remove('shake'), 400);
+                return;
+            }
+
+            input.blur(); // Hide mobile keyboard
+            errorElement.textContent = "";
+            let targetLetters = targetWord.split('');
+            let guessLetters = guess.split('');
+            let boxColors = ["gray", "gray", "gray", "gray"];
+
+            for (let i = 0; i < 4; i++) {
+                if (guessLetters[i] === targetLetters[i]) {
+                    boxColors[i] = "green";
+                    targetLetters[i] = null; 
+                    guessLetters[i] = null;
+                }
+            }
+
+            for (let i = 0; i < 4; i++) {
+                if (guessLetters[i] !== null) { 
+                    let targetIndex = targetLetters.indexOf(guessLetters[i]);
+                    if (targetIndex !== -1) {
+                        boxColors[i] = "yellow";
+                        targetLetters[targetIndex] = null; 
+                    }
+                }
+            }
+
+            for (let i = 0; i < 4; i++) {
+                const box = document.getElementById(`box-${currentAttempt}-${i}`);
+                setTimeout(() => {
+                    box.textContent = guess[i];
+                    box.classList.add(boxColors[i], 'filled');
+                }, i * 200); 
+            }
+
+            currentAttempt++;
+            input.value = "";
+
+            setTimeout(() => {
+                if (guess === targetWord) {
+                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                    document.getElementById("wordle-controls").style.display = "none";
+                    document.getElementById("wordle-success").style.display = "block";
+                } else if (currentAttempt >= maxAttempts) {
+                    errorElement.innerHTML = `Game Over!<br>The word was <b>${targetWord}</b>. Refresh to try again!`;
+                    document.getElementById("input-4").disabled = true;
+                }
+            }, 1000);
+        }
+
+        // --- Final Confetti Effect ---
+        function triggerFinalConfetti() {
+            var duration = 5000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff758c', '#ff7eb3', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff758c', '#ff7eb3', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+    </script>
+</body>
+</html>
