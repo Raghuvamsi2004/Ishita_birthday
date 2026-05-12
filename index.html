@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -213,9 +213,9 @@
     <div id="page-1" class="page">
         <h2>Level 1 🧩</h2>
         <p>Decode the emojis to find the word!</p>
-        <div class="clue">😁 📸 😄</div>
-        <input type="text" id="input-1" placeholder="Type your answer..." onkeypress="handleEnter(event, 1, 'smile', 'page-2')">
-        <button onclick="checkLevel(1, 'smile', 'page-2')">Check Answer</button>
+        <div class="clue">🥭☀️🥵</div>
+        <input type="text" id="input-1" placeholder="Type your answer..." onkeypress="handleEnter(event, 1, 'summer', 'page-2')">
+        <button onclick="checkLevel(1, 'summer', 'page-2')">Check Answer</button>
         <div class="error-msg" id="error-1"></div>
     </div>
 
@@ -223,9 +223,9 @@
     <div id="page-2" class="page">
         <h2>Level 2 📍</h2>
         <p>Where was this picture taken?</p>
-        <img src="Zoomed.png" alt="Zoomed Clue" class="zoomed-img" onerror="this.src='https://via.placeholder.com/300x200?text=Zoomed.png'">
-        <input type="text" id="input-2" placeholder="Enter location..." onkeypress="handleEnter(event, 2, 'park', 'page-3')">
-        <button onclick="checkLevel(2, 'park', 'page-3')">Check Answer</button> 
+        <img src="Zoomed.jpeg" alt="Zoomed Clue" class="zoomed-img" onerror="this.src='https://via.placeholder.com/300x200?text=Zoomed.jpeg'">
+        <input type="text" id="input-2" placeholder="Enter location..." onkeypress="handleEnter(event, 2, 'vijayawada', 'page-3')">
+        <button onclick="checkLevel(2, 'vijayawada', 'page-3')">Check Answer</button> 
         <div class="error-msg" id="error-2"></div>
     </div>
 
@@ -234,14 +234,14 @@
         <h2>Level 3 ⏳</h2>
         <p>What is the correct chronological order of these pictures? (e.g. 12345)</p>
         <div class="img-grid">
-            <div class="img-item"><img src="Img1.png" alt="1" onerror="this.src='https://via.placeholder.com/65?text=1'"><span>1</span></div>
-            <div class="img-item"><img src="Img2.png" alt="2" onerror="this.src='https://via.placeholder.com/65?text=2'"><span>2</span></div>
-            <div class="img-item"><img src="Img3.png" alt="3" onerror="this.src='https://via.placeholder.com/65?text=3'"><span>3</span></div>
-            <div class="img-item"><img src="Img4.png" alt="4" onerror="this.src='https://via.placeholder.com/65?text=4'"><span>4</span></div>
-            <div class="img-item"><img src="Img5.png" alt="5" onerror="this.src='https://via.placeholder.com/65?text=5'"><span>5</span></div>
+            <div class="img-item"><img src="Img4.png" alt="1" onerror="this.src='https://via.placeholder.com/65?text=1'"><span>1</span></div>
+            <div class="img-item"><img src="Img3.png" alt="2" onerror="this.src='https://via.placeholder.com/65?text=2'"><span>2</span></div>
+            <div class="img-item"><img src="Img5.png" alt="3" onerror="this.src='https://via.placeholder.com/65?text=3'"><span>3</span></div>
+            <div class="img-item"><img src="Img1.png" alt="4" onerror="this.src='https://via.placeholder.com/65?text=4'"><span>4</span></div>
+            <div class="img-item"><img src="Img2.png" alt="5" onerror="this.src='https://via.placeholder.com/65?text=5'"><span>5</span></div>
         </div>
-        <input type="text" id="input-3" placeholder="Enter sequence..." onkeypress="handleEnter(event, 3, '43512', 'page-4')">
-        <button onclick="checkLevel(3, '43512', 'page-4')">Check Answer</button> 
+        <input type="text" id="input-3" placeholder="Enter sequence..." onkeypress="handleEnter(event, 3, '45213', 'page-4')">
+        <button onclick="checkLevel(3, '45213', 'page-4')">Check Answer</button> 
         <div class="error-msg" id="error-3"></div>
     </div>
 
@@ -268,11 +268,11 @@
 
     <!-- LEVEL 5 -->
     <div id="page-5" class="page">
-        <h2>Level 5 🍣</h2>
+        <h2>Level 5 </h2>
         <p>Last question before the surprise!</p>
-        <div class="clue" style="font-size: 1.2rem; font-weight: bold;">What is your favorite food?</div>
-        <input type="text" id="input-5" placeholder="Type your answer..." onkeypress="handleEnter(event, 5, 'sushi', 'page-final', true)">
-        <button onclick="checkLevel(5, 'sushi', 'page-final', true)">Check Answer</button>
+        <div class="clue" style="font-size: 1.2rem; font-weight: bold;">what was the month that you and me had our first drink together?</div>
+        <input type="text" id="input-5" placeholder="Type your answer..." onkeypress="handleEnter(event, 5, 'may 2022', 'page-final', true)">
+        <button onclick="checkLevel(5, 'may 2022', 'page-final', true)">Check Answer</button>
         <div class="error-msg" id="error-5"></div>
     </div>
 
@@ -282,7 +282,7 @@
         <p>Happy Birthday Ishita! Here is your special surprise.</p>
         <video controls playsinline>
             <source src="Ishita_birthday.MP4" type="video/mp4">
-            Your browser does not support the video tag.
+            Your browser does not support the video tag. 
         </video>
     </div>
 
